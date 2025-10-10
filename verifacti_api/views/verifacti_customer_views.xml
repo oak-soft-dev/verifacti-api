@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario de cliente VeriFactu -->
+    <record id="view_verifacti_customer_form" model="ir.ui.view">
+        <field name="name">verifacti.customer.form</field>
+        <field name="model">verifacti.customer</field>
+        <field name="arch" type="xml">
+            <form string="Cliente VeriFactu">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o"
+                                attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Facturas"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nombre del cliente"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="identification">
+                            <field name="nif" placeholder="A12345678"/>
+                            <field name="email" widget="email"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="active"/>
+                        </group>
+                        <group name="address">
+                            <field name="street" placeholder="Calle, número..."/>
+                            <field name="street2" placeholder="Piso, puerta..."/>
+                            <field name="city"/>
+                            <field name="zip"/>
+                            <field name="state_id"/>
+                            <field name="country_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Estadísticas" name="statistics">
+                            <group>
+                                <group>
+                                    <field name="total_invoices" readonly="1"/>
+                                    <field name="total_amount" readonly="1" widget="monetary"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="last_invoice_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Relación con Odoo" name="odoo_link">
+                            <group>
+                                <field name="partner_id" context="{'default_customer_rank': 1}"/>
+                            </group>
+                        </page>
+                        <page string="Notas" name="notes">
+                            <field name="notes" placeholder="Notas internas sobre este cliente..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de lista de clientes VeriFactu -->
+    <record id="view_verifacti_customer_tree" model="ir.ui.view">
+        <field name="name">verifacti.customer.tree</field>
+        <field name="model">verifacti.customer</field>
+        <field name="arch" type="xml">
+            <tree string="Clientes VeriFactu"
+                  decoration-muted="not active">
+                <field name="name"/>
+                <field name="nif"/>
+                <field name="email"/>
+                <field name="city"/>
+                <field name="invoice_count"/>
+                <field name="total_amount" widget="monetary"/>
+                <field name="last_invoice_date"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista kanban de clientes VeriFactu -->
+    <record id="view_verifacti_customer_kanban" model="ir.ui.view">
+        <field name="name">verifacti.customer.kanban</field>
+        <field name="model">verifacti.customer</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="nif"/>
+                <field name="email"/>
+                <field name="invoice_count"/>
+                <field name="total_amount"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="row">
+                                <div class="col-12">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <field name="nif"/>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <field name="email"/>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-6">
+                                    <a type="object" name="action_view_invoices">
+                                        <field name="invoice_count"/> Facturas
+                                    </a>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <field name="total_amount" widget="monetary"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda -->
+    <record id="view_verifacti_customer_search" model="ir.ui.view">
+        <field name="name">verifacti.customer.search</field>
+        <field name="model">verifacti.customer</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Clientes VeriFactu">
+                <field name="name" string="Nombre o NIF"
+                       filter_domain="['|', ('name', 'ilike', self), ('nif', 'ilike', self)]"/>
+                <field name="nif"/>
+                <field name="email"/>
+                <field name="city"/>
+                <filter string="Activos" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactivos" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="Con facturas" name="with_invoices" domain="[('total_invoices', '>', 0)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Ciudad" name="group_city" context="{'group_by': 'city'}"/>
+                    <filter string="Provincia" name="group_state" context="{'group_by': 'state_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción para abrir clientes VeriFactu -->
+    <record id="action_verifacti_customer" model="ir.actions.act_window">
+        <field name="name">Clientes VeriFactu</field>
+        <field name="res_model">verifacti.customer</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_verifacti_customer_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo cliente VeriFactu
+            </p>
+            <p>
+                Los clientes son los destinatarios de las facturas que emites.
+            </p>
+            <p>
+                Puedes crear clientes independientes de Odoo o vincularlos
+                con contactos existentes en tu base de datos.
+            </p>
+        </field>
+    </record>
+</odoo>

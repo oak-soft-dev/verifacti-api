@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Factura de demostración 1 -->
+        <record id="demo_invoice_1" model="verifacti.invoice">
+            <field name="supplier_id" ref="demo_company_1"/>
+            <field name="serie">DEMO</field>
+            <field name="numero">0001</field>
+            <field name="customer_id" ref="demo_customer_acme"/>
+            <field name="fecha_expedicion" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="tipo_factura">F1</field>
+            <field name="descripcion">Factura de demostración - Servicios de consultoría</field>
+            <field name="validar_destinatario" eval="False"/>
+        </record>
+
+        <!-- Línea 1 de factura demo 1 -->
+        <record id="demo_invoice_1_line_1" model="verifacti.invoice.line">
+            <field name="invoice_id" ref="demo_invoice_1"/>
+            <field name="sequence">10</field>
+            <field name="base_imponible">1000.00</field>
+            <field name="tipo_impositivo">21</field>
+            <field name="cuota_repercutida">210.00</field>
+            <field name="impuesto">01</field>
+            <field name="calificacion_operacion">S1</field>
+            <field name="clave_regimen">01</field>
+        </record>
+
+        <!-- Factura de demostración 2 -->
+        <record id="demo_invoice_2" model="verifacti.invoice">
+            <field name="supplier_id" ref="demo_company_2"/>
+            <field name="serie">DEMO</field>
+            <field name="numero">0002</field>
+            <field name="customer_id" ref="demo_customer_techsolutions"/>
+            <field name="fecha_expedicion" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d')"/>
+            <field name="tipo_factura">F1</field>
+            <field name="descripcion">Factura de demostración - Venta de productos</field>
+            <field name="validar_destinatario" eval="False"/>
+        </record>
+
+        <!-- Línea 1 de factura demo 2 -->
+        <record id="demo_invoice_2_line_1" model="verifacti.invoice.line">
+            <field name="invoice_id" ref="demo_invoice_2"/>
+            <field name="sequence">10</field>
+            <field name="base_imponible">500.00</field>
+            <field name="tipo_impositivo">21</field>
+            <field name="cuota_repercutida">105.00</field>
+            <field name="impuesto">01</field>
+            <field name="calificacion_operacion">S1</field>
+            <field name="clave_regimen">01</field>
+        </record>
+
+        <!-- Línea 2 de factura demo 2 -->
+        <record id="demo_invoice_2_line_2" model="verifacti.invoice.line">
+            <field name="invoice_id" ref="demo_invoice_2"/>
+            <field name="sequence">20</field>
+            <field name="base_imponible">300.00</field>
+            <field name="tipo_impositivo">10</field>
+            <field name="cuota_repercutida">30.00</field>
+            <field name="impuesto">01</field>
+            <field name="calificacion_operacion">S1</field>
+            <field name="clave_regimen">01</field>
+        </record>
+    </data>
+</odoo>

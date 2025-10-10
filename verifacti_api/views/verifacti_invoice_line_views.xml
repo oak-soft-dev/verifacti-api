@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario de línea de factura -->
+    <record id="view_verifacti_invoice_line_form" model="ir.ui.view">
+        <field name="name">verifacti.invoice.line.form</field>
+        <field name="model">verifacti.invoice.line</field>
+        <field name="arch" type="xml">
+            <form string="Línea de Factura VeriFactu">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="invoice_id"/>
+                            <field name="sequence"/>
+                            <field name="base_imponible"/>
+                            <field name="impuesto"/>
+                            <field name="tipo_impositivo"/>
+                            <field name="cuota_repercutida"/>
+                        </group>
+                        <group>
+                            <field name="calificacion_operacion"/>
+                            <field name="clave_regimen"/>
+                            <field name="operacion_exenta"/>
+                            <field name="base_imponible_a_coste"/>
+                            <field name="tipo_recargo_equivalencia"/>
+                            <field name="cuota_recargo_equivalencia"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

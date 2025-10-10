@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Company Form View -->
+    <record id="view_company_form_verifacti" model="ir.ui.view">
+        <field name="name">res.company.form.verifacti</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Verifacti tab after General Information -->
+            <xpath expr="//page[@name='general_info']" position="after">
+                <page string="Verifacti API" name="verifacti">
+                    <group>
+                        <group name="verifacti_info" string="Información Verifacti">
+                            <field name="is_verifacti_supplier" readonly="1"/>
+                            <field name="verifacti_api_config_count" readonly="1"/>
+                            <field name="verifacti_supplier_invoice_count" readonly="1"/>
+                            <field name="verifacti_default_api_config_id" readonly="1"/>
+                        </group>
+                        <group name="verifacti_actions" string="Acciones">
+                            <button name="action_view_verifacti_api_configs"
+                                    string="Ver Configuraciones API"
+                                    type="object"
+                                    class="btn-primary"
+                                    icon="fa-cog"
+                                    attrs="{'invisible': [('verifacti_api_config_count', '=', 0)]}"/>
+                            <button name="action_create_verifacti_api_config"
+                                    string="Crear Nueva Configuración"
+                                    type="object"
+                                    class="btn-secondary"
+                                    icon="fa-plus"/>
+                            <button name="action_view_verifacti_supplier_invoices"
+                                    string="Ver Facturas Emitidas"
+                                    type="object"
+                                    class="btn-secondary"
+                                    icon="fa-file-invoice"
+                                    attrs="{'invisible': [('verifacti_supplier_invoice_count', '=', 0)]}"/>
+                        </group>
+                    </group>
+
+                    <group name="verifacti_configs" string="Configuraciones de API">
+                        <field name="verifacti_api_config_ids" nolabel="1">
+                            <tree string="Configuraciones API Verifacti">
+                                <field name="name"/>
+                                <field name="environment"/>
+                                <field name="is_default" widget="boolean_toggle"/>
+                                <field name="usage_count"/>
+                                <field name="last_used_date"/>
+                                <field name="active" widget="boolean_toggle"/>
+                                <button name="action_test_connection"
+                                        string="Probar"
+                                        type="object"
+                                        icon="fa-plug"
+                                        class="btn-link"/>
+                                <button name="action_set_as_default"
+                                        string="Por Defecto"
+                                        type="object"
+                                        icon="fa-star"
+                                        class="btn-link"
+                                        attrs="{'invisible': [('is_default', '=', True)]}"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

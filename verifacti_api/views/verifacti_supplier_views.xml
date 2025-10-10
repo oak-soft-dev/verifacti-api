@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario de proveedor VeriFactu -->
+    <record id="view_verifacti_supplier_form" model="ir.ui.view">
+        <field name="name">verifacti.supplier.form</field>
+        <field name="model">verifacti.supplier</field>
+        <field name="arch" type="xml">
+            <form string="Proveedor VeriFactu">
+                <header>
+                    <button name="action_manage_api_configs" string="Gestionar Configuraciones API"
+                            type="object" class="oe_highlight"/>
+                    <button name="action_create_api_config" string="Nueva Configuración API"
+                            type="object" class="btn-secondary"
+                            icon="fa-plus"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o"
+                                attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                            <field name="invoice_count" widget="statinfo" string="Facturas"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nombre de la compañía"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="identification">
+                            <field name="company_id" invisible="1"/>
+                            <field name="vat" placeholder="ESA12345678"/>
+                            <field name="active"/>
+                        </group>
+                        <group name="api_config">
+                            <field name="verifacti_default_api_config_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Configuraciones API" name="api_configs">
+                            <field name="verifacti_api_config_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="environment"/>
+                                    <field name="is_default" widget="boolean_toggle"/>
+                                    <field name="usage_count"/>
+                                    <field name="last_used_date"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Información de Contacto" name="contact">
+                            <group>
+                                <group>
+                                    <field name="email" widget="email"/>
+                                    <field name="phone" widget="phone"/>
+                                </group>
+                                <group>
+                                    <field name="street" placeholder="Calle, número..."/>
+                                    <field name="street2" placeholder="Piso, puerta..."/>
+                                    <field name="city"/>
+                                    <field name="zip"/>
+                                    <field name="state_id"/>
+                                    <field name="country_id" options="{'no_create': True}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Estadísticas" name="statistics">
+                            <group>
+                                <group>
+                                    <field name="total_invoices_sent" readonly="1"/>
+                                    <field name="total_invoices_correct" readonly="1"/>
+                                    <field name="total_invoices_error" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="last_invoice_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notas" name="notes">
+                            <field name="notes" placeholder="Notas internas sobre este proveedor..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de lista de proveedores VeriFactu -->
+    <record id="view_verifacti_supplier_tree" model="ir.ui.view">
+        <field name="name">verifacti.supplier.tree</field>
+        <field name="model">verifacti.supplier</field>
+        <field name="arch" type="xml">
+            <tree string="Proveedores VeriFactu"
+                  decoration-muted="not active">
+                <field name="name"/>
+                <field name="vat"/>
+                <field name="invoice_count"/>
+                <field name="total_invoices_correct"/>
+                <field name="total_invoices_error"/>
+                <field name="last_invoice_date"/>
+                <field name="active" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista kanban de proveedores VeriFactu -->
+    <record id="view_verifacti_supplier_kanban" model="ir.ui.view">
+        <field name="name">verifacti.supplier.kanban</field>
+        <field name="model">verifacti.supplier</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="vat"/>
+                <field name="invoice_count"/>
+                <field name="total_invoices_correct"/>
+                <field name="total_invoices_error"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="row">
+                                <div class="col-12">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <field name="vat"/>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-4">
+                                    <a type="object" name="action_view_invoices">
+                                        <field name="invoice_count"/> Facturas
+                                    </a>
+                                </div>
+                                <div class="col-4 text-success">
+                                    ✓ <field name="total_invoices_correct"/>
+                                </div>
+                                <div class="col-4 text-danger">
+                                    ✗ <field name="total_invoices_error"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda -->
+    <record id="view_verifacti_supplier_search" model="ir.ui.view">
+        <field name="name">verifacti.supplier.search</field>
+        <field name="model">verifacti.supplier</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Proveedores VeriFactu">
+                <field name="name" string="Nombre o VAT"
+                       filter_domain="['|', ('name', 'ilike', self), ('vat', 'ilike', self)]"/>
+                <field name="vat"/>
+                <filter string="Activos" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactivos" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción para abrir proveedores VeriFactu -->
+    <record id="action_verifacti_supplier" model="ir.actions.act_window">
+        <field name="name">Proveedores VeriFactu</field>
+        <field name="res_model">verifacti.supplier</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_verifacti_supplier_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo proveedor VeriFactu
+            </p>
+            <p>
+                Cada proveedor representa un emisor de facturas con su propia API Key de Verifacti.
+                Esto permite gestionar múltiples NIFs emisores en una misma instalación.
+            </p>
+            <p>
+                <b>Pasos para configurar:</b>
+            </p>
+            <ol>
+                <li>Registrar el NIF en https://www.verifacti.com</li>
+                <li>Obtener la API Key para ese NIF</li>
+                <li>Crear el proveedor en Odoo con el NIF y su API Key</li>
+                <li>Probar la conexión antes de emitir facturas</li>
+            </ol>
+        </field>
+    </record>
+</odoo>

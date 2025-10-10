@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifacti API - Integración Directa para Odoo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .oe_container {
+            width: 100%;
+            padding: 40px 20px;
+        }
+
+        .oe_container.oe_dark {
+            background-color: #2C3E50;
+            color: #FFF;
+        }
+
+        .oe_row {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .oe_spaced {
+            margin-bottom: 20px;
+        }
+
+        h2.oe_slogan {
+            font-size: 28px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h3.oe_slogan {
+            font-size: 18px;
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin: 20px 0 15px;
+            font-weight: 600;
+        }
+
+        .alert {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .alert h3 {
+            color: #856404;
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .alert p {
+            color: #856404;
+            margin: 10px 0;
+        }
+
+        .alert ul {
+            color: #856404;
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        .alert-info h3,
+        .alert-info p,
+        .alert-info ul {
+            color: #0c5460;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-success h3,
+        .alert-success p,
+        .alert-success ul {
+            color: #155724;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .oe_picture {
+            margin-bottom: 15px;
+        }
+
+        .oe_picture i {
+            font-size: 48px;
+            color: #3498db;
+        }
+
+        .oe_dark .oe_picture i {
+            color: #FFF;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .oe_dark ul li:before {
+            color: #FFF;
+        }
+
+        .workflow-section {
+            margin-top: 30px;
+        }
+
+        .workflow-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .workflow-item h3 {
+            margin-top: 0;
+        }
+
+        .workflow-item i {
+            margin-right: 10px;
+        }
+
+        .tech-stack {
+            margin-top: 20px;
+        }
+
+        .tech-stack li {
+            font-size: 16px;
+            padding: 12px 0;
+            padding-left: 30px;
+        }
+
+        .tech-stack li:before {
+            content: "▸";
+        }
+
+        .advantages-text {
+            font-size: 16px;
+            line-height: 1.8;
+            text-align: center;
+            margin: 20px auto;
+            padding: 0 10px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: #FFF;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .faq-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+
+        .faq-item h3 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .faq-item ul {
+            margin-top: 10px;
+        }
+
+        .faq-item a {
+            color: #FFF;
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer p {
+            margin: 10px 0;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .highlight-box h3 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .highlight-box p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Tablets */
+        @media (min-width: 768px) {
+            .oe_container {
+                padding: 60px 40px;
+            }
+
+            h2.oe_slogan {
+                font-size: 36px;
+            }
+
+            h3.oe_slogan {
+                font-size: 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+
+            .feature-item {
+                text-align: left;
+            }
+
+            .advantages-text {
+                max-width: 800px;
+                font-size: 18px;
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 1024px) {
+            .oe_container {
+                padding: 80px 60px;
+            }
+
+            h2.oe_slogan {
+                font-size: 42px;
+            }
+
+            h3 {
+                font-size: 24px;
+            }
+
+            .oe_picture i {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan" style="color:#2C3E50;">Verifacti API - Integración Directa</h2>
+            <h3 class="oe_slogan">Integración directa con la API de Verifacti para cumplir con VeriFactu España</h3>
+        </div>
+    </section>
+
+    <section class="oe_container oe_dark">
+        <div class="oe_row">
+            <div class="alert">
+                <h3><i class="fa fa-warning"></i> Normativa VeriFactu 2026</h3>
+                <p><strong>VeriFactu será obligatorio</strong> para cumplir con la normativa de facturación de la Agencia Tributaria (AEAT):</p>
+                <ul>
+                    <li><strong>1 de enero de 2026:</strong> Empresas que tributan por el Impuesto de Sociedades</li>
+                    <li><strong>1 de julio de 2026:</strong> Resto de empresas y autónomos</li>
+                </ul>
+                <p>Implemente la solución ahora para garantizar el cumplimiento normativo desde el primer día.</p>
+            </div>
+
+            <div class="alert alert-success" style="background-color: #d4edda; border-color: #c3e6cb; margin-top: 20px;">
+                <h3 style="color: #155724;"><i class="fa fa-check-circle"></i> Ventaja Clave: Sin Certificados Digitales</h3>
+                <p style="color: #155724;"><strong>Verifacti gestiona los certificados digitales por ti.</strong> No necesitas instalar ni configurar certificados en tu sistema.</p>
+                <ul style="color: #155724;">
+                    <li><strong>Configuración simple:</strong> Solo necesitas una API Key</li>
+                    <li><strong>Sin mantenimiento:</strong> Verifacti gestiona renovaciones y actualizaciones</li>
+                    <li><strong>Multi-tenant nativo:</strong> Gestiona múltiples NIFs emisores con diferentes API Keys</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <div class="highlight-box">
+                <h3><i class="fa fa-rocket"></i> Arquitectura Multi-Proveedor</h3>
+                <p><strong>Ideal para gestorías, aplicaciones SaaS y empresas con múltiples NIFs</strong></p>
+                <p>Cada proveedor/emisor tiene su propia API Key y gestión independiente de facturas</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan" style="color:#2C3E50;">Características Principales</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-file-text"></i>
+                    </div>
+                    <h3>Gestión Completa de Facturas</h3>
+                    <ul>
+                        <li>Envío directo a AEAT mediante Verifacti API</li>
+                        <li>Generación automática de código QR VeriFactu</li>
+                        <li>Cálculo automático de huella (hash)</li>
+                        <li>Descarga de XMLs de petición y respuesta</li>
+                        <li>Monitorización en tiempo real del estado</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-list-alt"></i>
+                    </div>
+                    <h3>Operaciones Soportadas</h3>
+                    <ul>
+                        <li>Crear factura nueva (POST /create)</li>
+                        <li>Crear facturas en lote - hasta 50 (POST /create_bulk)</li>
+                        <li>Subsanar factura (PUT /modify)</li>
+                        <li>Anular factura (POST /cancel)</li>
+                        <li>Consultar estado factura (POST /status)</li>
+                        <li>Listar, exportar y descargar XMLs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container oe_dark">
+        <div class="oe_row oe_spaced">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <h3>Tipos de Factura Soportados</h3>
+                    <ul>
+                        <li>F1: Factura (Art. 6, 7.2 Y 7.3 del RD 1619/2012)</li>
+                        <li>F2: Factura simplificada</li>
+                        <li>R1-R5: Facturas rectificativas (varios artículos)</li>
+                        <li>F3: Factura en sustitución de simplificadas</li>
+                        <li>Soporte completo para todos los tipos AEAT</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-group"></i>
+                    </div>
+                    <h3>Gestión de Clientes</h3>
+                    <ul>
+                        <li>Integración nativa con Contactos de Odoo</li>
+                        <li>Validación de NIF/CIF españoles en AEAT</li>
+                        <li>Validación de IVAs intracomunitarios (VIES)</li>
+                        <li>Gestión de clientes extranjeros</li>
+                        <li>Marcado específico de clientes VeriFactu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <h3>Monitorización y Auditoría</h3>
+                    <ul>
+                        <li>Log completo de llamadas API</li>
+                        <li>Visualización de requests y responses</li>
+                        <li>Sistema de tracking de errores</li>
+                        <li>Códigos de estado HTTP detallados</li>
+                        <li>Historial de cambios con Chatter</li>
+                        <li>Estadísticas por proveedor emisor</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-cog"></i>
+                    </div>
+                    <h3>Configuración Multi-Proveedor</h3>
+                    <ul>
+                        <li>Gestión de múltiples NIFs emisores</li>
+                        <li>API Key independiente por proveedor</li>
+                        <li>Entornos Test y Producción separados</li>
+                        <li>Panel integrado en Ajustes de Odoo</li>
+                        <li>Validación automática de credenciales</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container oe_dark">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan">Stack Tecnológico</h2>
+            <ul class="tech-stack">
+                <li><strong>Verifacti API REST</strong> - API REST directa con autenticación por API Key</li>
+                <li><strong>Sin certificados digitales</strong> - Verifacti gestiona los certificados por ti</li>
+                <li><strong>Validación NIF/CIF AEAT</strong> - Validación automática en base de datos de la AEAT</li>
+                <li><strong>VIES Integration</strong> - Validación de IVAs intracomunitarios</li>
+                <li><strong>Colas y Cron Jobs</strong> - Gestión automática de estados y reintentos</li>
+                <li><strong>Multi-tenant Ready</strong> - Arquitectura preparada para múltiples emisores</li>
+                <li><strong>VeriFactu AEAT</strong> - Cumplimiento 100% con normativa española</li>
+                <li><strong>Odoo 16</strong> - Integración nativa con framework Odoo</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan" style="color:#2C3E50;">Flujo de Trabajo</h2>
+            <div class="workflow-section">
+                <div class="workflow-item" style="background: #d1ecf1; border-left: 4px solid #17a2b8;">
+                    <h3><i class="fa fa-info-circle" style="color:#0c5460;"></i> 1. Configuración de Proveedores Emisores</h3>
+                    <p><strong>Configure cada NIF emisor que necesite usar:</strong></p>
+                    <ul style="margin-top: 10px;">
+                        <li>Registre el NIF en Verifacti.com</li>
+                        <li>Obtenga la API Key específica para ese NIF</li>
+                        <li>Cree el proveedor en Odoo con su API Key</li>
+                        <li>Pruebe la conexión para verificar configuración</li>
+                    </ul>
+                    <p style="margin-top: 10px;"><strong>💡 Multi-tenant:</strong> Puede configurar tantos proveedores como necesite, cada uno con su propia API Key.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-users" style="color:#3498db;"></i> 2. Configuración de Clientes</h3>
+                    <p>Marque sus contactos existentes en Odoo como clientes VeriFactu. El sistema validará automáticamente sus NIFs en la base de datos de la AEAT antes de enviar facturas.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-file-text-o" style="color:#3498db;"></i> 3. Creación de Facturas</h3>
+                    <p>Cree facturas VeriFactu seleccionando el proveedor emisor, cliente, tipo de factura y líneas. El sistema validará automáticamente todos los datos según normativa AEAT.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-send" style="color:#3498db;"></i> 4. Envío a Verifacti</h3>
+                    <p>Con un solo clic, envíe la factura a la AEAT mediante Verifacti. El sistema usa automáticamente la API Key del proveedor emisor seleccionado.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-clock-o" style="color:#3498db;"></i> 5. Monitorización Automática</h3>
+                    <p>El cron job verifica automáticamente cada 5 minutos el estado de las facturas pendientes y actualiza códigos QR, huellas y XMLs.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-check-circle" style="color:#3498db;"></i> 6. Descarga de Documentos</h3>
+                    <p>Una vez aceptada la factura, descargue los XMLs de petición y respuesta, visualice el código QR y la huella VeriFactu.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container oe_dark">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan">Validaciones Automáticas</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-shield"></i>
+                    </div>
+                    <h3>Validaciones de Datos</h3>
+                    <ul>
+                        <li>Proveedor emisor obligatorio en todas las facturas</li>
+                        <li>Máximo 12 líneas por factura (restricción AEAT)</li>
+                        <li>Descripción máximo 500 caracteres</li>
+                        <li>Tipos impositivos solo valores permitidos (0, 2, 4, 5, 7.5, 10, 21)</li>
+                        <li>Operaciones exentas sin tipo ni cuota</li>
+                    </ul>
+                </div>
+                <div class="feature-item">
+                    <div class="oe_picture">
+                        <i class="fa fa-check-square-o"></i>
+                    </div>
+                    <h3>Validaciones de Negocio</h3>
+                    <ul>
+                        <li>Validación de NIF del destinatario en AEAT</li>
+                        <li>Unicidad por proveedor (serie, número, fecha)</li>
+                        <li>Coherencia de importes y totales</li>
+                        <li>Validación de tipos de factura según normativa</li>
+                        <li>Verificación de claves de régimen válidas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan" style="color:#2C3E50;">Estados de Factura</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Descripción</th>
+                        <th>Acciones Disponibles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Borrador</strong></td>
+                        <td>Factura creada pero no enviada</td>
+                        <td>Editar, Enviar a Verifacti</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enviado</strong></td>
+                        <td>Factura enviada a Verifacti</td>
+                        <td>Verificar Estado</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pendiente</strong></td>
+                        <td>Factura en cola de procesamiento AEAT</td>
+                        <td>Verificar Estado (auto cada 5 min)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Correcto</strong></td>
+                        <td>Factura aceptada por la AEAT</td>
+                        <td>Descargar XMLs, Ver QR, Anular</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error</strong></td>
+                        <td>Factura rechazada o con errores</td>
+                        <td>Ver error, Subsanar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Anulado</strong></td>
+                        <td>Factura anulada correctamente</td>
+                        <td>Solo lectura</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="oe_container oe_dark">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan">Ventajas de la Integración con Verifacti</h2>
+            <p class="advantages-text">
+                <strong>Verifacti</strong> es una plataforma especializada en el cumplimiento de VeriFactu que elimina la complejidad
+                de la gestión de certificados digitales. Su API REST simple y robusta permite enviar facturas a la AEAT
+                sin necesidad de instalar certificados en tu sistema.
+            </p>
+            <p class="advantages-text">
+                Con <strong>arquitectura multi-tenant nativa</strong>, este módulo es ideal para gestorías y aplicaciones SaaS
+                que necesitan gestionar facturas de múltiples clientes/emisores, cada uno con su propio NIF y credenciales.
+            </p>
+            <p class="advantages-text">
+                La <strong>validación automática de NIFs</strong> en la base de datos de la AEAT antes del envío reduce drásticamente
+                los rechazos y garantiza que solo se envíen facturas con datos correctos.
+            </p>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan" style="color:#2C3E50;">Casos de Uso Principales</h2>
+            <div class="workflow-section">
+                <div class="workflow-item">
+                    <h3><i class="fa fa-briefcase" style="color:#3498db;"></i> Gestorías y Asesorías</h3>
+                    <p>Gestione facturas VeriFactu de múltiples clientes desde una única instalación de Odoo. Cada cliente tiene su propio NIF emisor y API Key de Verifacti.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-cloud" style="color:#3498db;"></i> Aplicaciones SaaS Multi-tenant</h3>
+                    <p>Ofrezca cumplimiento VeriFactu a sus clientes sin complicaciones. Cada tenant puede configurar sus propios emisores y gestionar sus facturas de forma independiente.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-building" style="color:#3498db;"></i> Empresas con Múltiples NIFs</h3>
+                    <p>Si su empresa opera con varios NIFs (matriz y filiales), gestione todos desde un único sistema con control independiente por NIF.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3><i class="fa fa-shopping-cart" style="color:#3498db;"></i> Comercio Retail y Hostelería</h3>
+                    <p>Emita facturas simplificadas (F2) sin necesidad de NIF del cliente, ideal para tickets de venta y operaciones de caja.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container oe_dark">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan">Modelo de Precios Verifacti</h2>
+            <p class="advantages-text">
+                <strong>Sin costes iniciales. Sin compromiso de permanencia. Cancela cuando quieras. Paga solo por lo que usas.</strong>
+            </p>
+
+            <div class="workflow-section" style="margin-top: 30px;">
+                <div class="workflow-item" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                    <h3 style="color: white; text-align: center; font-size: 24px;"><i class="fa fa-gift"></i> 1 NIF de Prueba - GRATIS</h3>
+                    <p style="text-align: center; font-size: 18px; margin: 15px 0;"><strong>0€ / mes</strong></p>
+                    <p style="text-align: center;">Sin tarjeta de crédito. Prueba la API y haz tu integración sin coste.</p>
+                    <ul style="margin-top: 20px;">
+                        <li>Empresa de prueba con su API Key</li>
+                        <li>Crea tu cuenta y haz tus primeras llamadas en segundos</li>
+                        <li>Entorno de test completamente funcional</li>
+                        <li>Ideal para desarrollo e integración</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-item" style="background: #f8f9fa;">
+                    <h3 style="text-align: center; color: #2C3E50;"><i class="fa fa-building"></i> Hasta 100 NIFs Emisores</h3>
+                    <p style="text-align: center; font-size: 22px; margin: 15px 0; color: #3498db;"><strong>desde 2.9€ por NIF/mes</strong></p>
+                    <p style="text-align: center; color: #666; margin-bottom: 20px;">Elige el número de NIFs que necesites (mensual o anual - ¡ahorra un 10%!)</p>
+                    <ul>
+                        <li>API VeriFactu completa</li>
+                        <li>API TicketBAI incluida</li>
+                        <li>API de gestión de NIFs</li>
+                        <li>NIFs ilimitados en test</li>
+                        <li>Webhooks para notificaciones</li>
+                        <li>Validación automática de llamadas</li>
+                        <li>Comprobación de destinatario en AEAT</li>
+                        <li>Declaración responsable automatizada</li>
+                        <li>Automatización de representación</li>
+                        <li>Arquitectura serverless escalable</li>
+                        <li>Guía de integración completa</li>
+                        <li>Ejemplos de llamadas API</li>
+                        <li>Soporte dedicado</li>
+                    </ul>
+                    <p style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 6px; color: #856404;">
+                        <strong><i class="fa fa-info-circle"></i> Límite de seguridad:</strong> 3.000 facturas por NIF/mes incluidas.
+                        Si se supera: +2€ por cada 1.000 facturas adicionales.
+                    </p>
+                </div>
+
+                <div class="workflow-item" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;">
+                    <h3 style="color: white; text-align: center; font-size: 24px;"><i class="fa fa-rocket"></i> Más de 100 NIFs Emisores</h3>
+                    <p style="text-align: center; font-size: 20px; margin: 15px 0;"><strong>Precio a Medida</strong></p>
+                    <p style="text-align: center; margin-bottom: 20px;">Contáctanos y te daremos un presupuesto ajustado a tu número de NIFs y volumen de facturas.</p>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="mailto:contacto@verifacti.com" style="display: inline-block; padding: 12px 30px; background: white; color: #f5576c; text-decoration: none; border-radius: 6px; font-weight: 600;">
+                            <i class="fa fa-envelope"></i> Solicitar Presupuesto
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 30px; font-size: 14px; opacity: 0.8;">
+                <em>Precios sin IVA. Modelo de suscripción con pagos recurrentes mensuales o anuales.</em>
+            </p>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan" style="color:#2C3E50;">Enlaces de Referencia</h2>
+            <div class="btn-container">
+                <a href="https://www.verifacti.com" target="_blank" class="btn"><i class="fa fa-globe"></i> Plataforma Verifacti</a>
+            </div>
+            <div class="btn-container">
+                <a href="https://www.verifacti.com/docs" target="_blank" class="btn"><i class="fa fa-book"></i> Documentación API</a>
+            </div>
+            <div class="btn-container">
+                <a href="https://www.verifacti.com/pricing" target="_blank" class="btn"><i class="fa fa-credit-card"></i> Precios Verifacti</a>
+            </div>
+            <div class="btn-container">
+                <a href="https://sede.agenciatributaria.gob.es" target="_blank" class="btn"><i class="fa fa-bank"></i> AEAT</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container">
+        <div class="oe_row oe_spaced">
+            <h2 class="oe_slogan" style="color:#2C3E50;">Preguntas Frecuentes</h2>
+            <div class="workflow-section">
+                <div class="workflow-item">
+                    <h3>¿Puedo gestionar facturas de múltiples emisores/NIFs?</h3>
+                    <p><strong>Sí, es una de las características principales del módulo.</strong> Cada proveedor tiene su propia API Key de Verifacti y puede emitir facturas de forma independiente. Ideal para gestorías y aplicaciones SaaS.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Necesito certificado digital?</h3>
+                    <p><strong>No.</strong> Este módulo usa la API de Verifacti que gestiona los certificados por ti. Solo necesitas una API Key.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿El módulo es realmente gratuito?</h3>
+                    <p><strong>Sí, el módulo es completamente gratuito</strong> bajo licencia LGPL-3. Sin embargo, necesitas una cuenta de pago en Verifacti para el entorno de producción. El entorno de test de Verifacti es gratuito para pruebas.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Qué requisitos necesito para la instalación?</h3>
+                    <p><strong>Requisitos técnicos:</strong></p>
+                    <ul>
+                        <li>Odoo 16.0 (Community o Enterprise Edition)</li>
+                        <li>Cuenta activa en Verifacti.com</li>
+                        <li>API Key de Verifacti por cada NIF emisor</li>
+                        <li>Conexión a internet para llamadas API</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Es compatible con Odoo Community Edition?</h3>
+                    <p><strong>Sí, totalmente compatible</strong> con Odoo Community Edition 16.0. No requiere Odoo Enterprise ni módulos adicionales de pago.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Cuánto cuesta Verifacti?</h3>
+                    <p><strong>El módulo de Odoo es gratuito.</strong> Los precios de Verifacti son:</p>
+                    <ul>
+                        <li><strong>Entorno de test:</strong> GRATIS - Sin tarjeta de crédito, incluye 1 NIF de prueba</li>
+                        <li><strong>Producción (hasta 100 NIFs):</strong> Desde 2.9€/NIF/mes (planes mensuales o anuales con 10% descuento)</li>
+                        <li><strong>Producción (+100 NIFs):</strong> Precio personalizado según volumen</li>
+                        <li><strong>Sin costes iniciales, sin permanencia</strong> - Cancela cuando quieras</li>
+                    </ul>
+                    <p style="margin-top: 10px;">El coste depende del número de NIFs emisores activos en producción. Pagas solo por lo que usas.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Qué es un NIF emisor en Verifacti?</h3>
+                    <p><strong>Un NIF emisor es cada contribuyente u obligado tributario</strong> que emite facturas usando tu software:</p>
+                    <ul>
+                        <li><strong>Software vendido/distribuido:</strong> Cada usuario de tu software que emite facturas (número de clientes)</li>
+                        <li><strong>Software interno:</strong> Tu propio NIF, o varios NIFs si eres un grupo de empresas</li>
+                        <li><strong>Gestorías/Asesorías:</strong> Cada cliente tuyo que gestiones (cada NIF que facturas en su nombre)</li>
+                        <li><strong>Autofacturas:</strong> Los obligados tributarios sujetos pasivos del IVA</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Cómo funciona el pago por NIFs?</h3>
+                    <p><strong>Sistema de pago flexible y transparente:</strong></p>
+                    <ul>
+                        <li><strong>Planes mensuales:</strong> Pagas por adelantado cada mes. Al añadir NIFs se prorratean y ajustan automáticamente</li>
+                        <li><strong>Planes anuales (10% descuento):</strong> Pago adelantado anual. Los NIFs nuevos se prorratean hasta el siguiente ciclo</li>
+                        <li><strong>Sin devoluciones:</strong> Si desactivas un NIF, dejas de pagar en el siguiente ciclo (no hay reembolso del tiempo no usado)</li>
+                        <li><strong>Escalable:</strong> Añade o desactiva NIFs cuando quieras sin penalización</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Hay límite de facturas por NIF?</h3>
+                    <p><strong>Sí, pero es muy generoso:</strong> Cada plan incluye hasta <strong>3.000 facturas por NIF/mes</strong>.</p>
+                    <p style="margin-top: 10px;">Este es un límite de seguridad que casi nunca se alcanza. Si lo superas:</p>
+                    <ul>
+                        <li>La operativa NO se interrumpe</li>
+                        <li>Se añaden <strong>2€ por cada 1.000 facturas adicionales</strong></li>
+                        <li>Si tu volumen es mayor, contacta para un plan personalizado</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿El precio incluye TicketBAI?</h3>
+                    <p><strong>Sí.</strong> Todos los planes de Verifacti permiten usar tanto <strong>VeriFactu como TicketBAI</strong> sin coste adicional. Puedes elegir qué sistema usar para cada NIF sin que afecte al precio.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Hay API para gestionar NIFs automáticamente?</h3>
+                    <p><strong>Sí.</strong> Verifacti incluye una API completa para:</p>
+                    <ul>
+                        <li>Activar y desactivar NIFs programáticamente</li>
+                        <li>Configurar webhooks para notificaciones</li>
+                        <li>Gestión automatizada de modelos de representación</li>
+                        <li>Todo incluido en el precio, sin coste adicional</li>
+                    </ul>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿El precio depende del número de TPVs o locales?</h3>
+                    <p><strong>No.</strong> Los precios de Verifacti son por contribuyente (NIF) e independientes del número de TPVs, locales o puntos de venta desde los cuales se emitan las facturas. Es una API en la nube que no requiere instalación local de software.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Se integra con el módulo de facturación de Odoo?</h3>
+                    <p><strong>Este módulo es independiente</strong> y gestiona sus propias facturas VeriFactu. No está integrado directamente con <code>account.move</code>. Esto permite mayor flexibilidad y simplicidad en la configuración.</p>
+                </div>
+
+                <div class="workflow-item">
+                    <h3>¿Incluye soporte técnico oficial?</h3>
+                    <p>Este es un módulo desarrollado por la comunidad. <strong>No incluye soporte técnico oficial.</strong> Para servicios profesionales de implementación, personalización o soporte, puede contactar con Oak Soft en <a href="mailto:oak.soft@telefonica.net" style="color:#3498db;">oak.soft@telefonica.net</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="oe_container footer">
+        <div class="oe_row">
+            <hr/>
+            <p><strong>Verifacti API - Integración Directa para Odoo</strong></p>
+            <p>Desarrollado por <strong>Oak Soft</strong> | Licencia LGPL-3 | Versión 16.0.1.0.0</p>
+            <p><i class="fa fa-envelope"></i> Contacto y Soporte: <a href="mailto:oak.soft@telefonica.net">oak.soft@telefonica.net</a></p>
+            <p style="margin-top: 15px;">
+                <a href="https://github.com/oak-soft-dev/verifacti-api" target="_blank"><i class="fa fa-github"></i> GitHub</a> |
+                <a href="https://www.verifacti.com" target="_blank"><i class="fa fa-globe"></i> Verifacti.com</a>
+            </p>
+        </div>
+    </section>
+</body>
+</html>

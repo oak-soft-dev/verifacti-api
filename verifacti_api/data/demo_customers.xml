@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Customers -->
+
+        <record id="demo_customer_acme" model="verifacti.customer">
+            <field name="name">ACME Corporation S.L.</field>
+            <field name="nif">B85905495</field>
+            <field name="street">Gran Vía, 123</field>
+            <field name="city">Madrid</field>
+            <field name="state_id" ref="base.state_es_m"/>
+            <field name="zip">28013</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="email">facturacion@acme.es</field>
+            <field name="phone">+34 910 111 222</field>
+        </record>
+
+        <record id="demo_customer_techsolutions" model="verifacti.customer">
+            <field name="name">Tech Solutions Iberia S.A.</field>
+            <field name="nif">A28015865</field>
+            <field name="street">Paseo de la Castellana, 95</field>
+            <field name="city">Madrid</field>
+            <field name="state_id" ref="base.state_es_m"/>
+            <field name="zip">28046</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="email">admin@techsolutions.es</field>
+            <field name="phone">+34 911 333 444</field>
+        </record>
+
+        <record id="demo_customer_distribuciones" model="verifacti.customer">
+            <field name="name">Distribuciones García S.L.</field>
+            <field name="nif">B82018474</field>
+            <field name="street">Calle Mayor, 45</field>
+            <field name="city">Barcelona</field>
+            <field name="state_id" ref="base.state_es_b"/>
+            <field name="zip">08002</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="email">contabilidad@garcia.es</field>
+            <field name="phone">+34 933 555 666</field>
+        </record>
+
+        <record id="demo_customer_servicios_sur" model="verifacti.customer">
+            <field name="name">Servicios Profesionales del Sur S.L.</field>
+            <field name="nif">B87654323</field>
+            <field name="street">Avenida de Andalucía, 78</field>
+            <field name="city">Sevilla</field>
+            <field name="state_id" ref="base.state_es_se"/>
+            <field name="zip">41006</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="email">info@spsur.es</field>
+            <field name="phone">+34 954 777 888</field>
+        </record>
+
+        <record id="demo_customer_consultoria" model="verifacti.customer">
+            <field name="name">Consultoría y Estrategia S.A.</field>
+            <field name="nif">A58818501</field>
+            <field name="street">Rambla de Catalunya, 200</field>
+            <field name="city">Barcelona</field>
+            <field name="state_id" ref="base.state_es_b"/>
+            <field name="zip">08008</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="email">factura@consultoria.es</field>
+            <field name="phone">+34 932 999 000</field>
+        </record>
+
+    </data>
+</odoo>

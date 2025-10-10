@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menú raíz -->
+    <menuitem id="menu_verifacti_root"
+              name="Verifacti"
+              web_icon="verifacti_api,static/description/icon.png"
+              sequence="50"/>
+
+    <!-- Menú de Facturas -->
+    <menuitem id="menu_verifacti_invoices"
+              name="Facturas"
+              parent="menu_verifacti_root"
+              sequence="10"/>
+
+    <menuitem id="menu_verifacti_invoice_list"
+              name="Facturas VeriFactu"
+              parent="menu_verifacti_invoices"
+              action="action_verifacti_invoice"
+              sequence="10"/>
+
+    <!-- Menú de Contactos -->
+    <menuitem id="menu_verifacti_contacts"
+              name="Contactos"
+              parent="menu_verifacti_root"
+              sequence="20"/>
+
+    <menuitem id="menu_verifacti_supplier_list"
+              name="Proveedores"
+              parent="menu_verifacti_contacts"
+              action="action_verifacti_supplier"
+              sequence="10"/>
+
+    <menuitem id="menu_verifacti_customer_list"
+              name="Clientes"
+              parent="menu_verifacti_contacts"
+              action="action_verifacti_customer"
+              sequence="20"/>
+
+    <!-- Menú de Monitorización -->
+    <menuitem id="menu_verifacti_monitoring"
+              name="Monitorización"
+              parent="menu_verifacti_root"
+              sequence="30"/>
+
+    <menuitem id="menu_verifacti_api_log_list"
+              name="Logs de API"
+              parent="menu_verifacti_monitoring"
+              action="action_verifacti_api_log"
+              sequence="10"/>
+
+    <!-- Menú de Configuración -->
+    <menuitem id="menu_verifacti_config"
+              name="Configuración"
+              parent="menu_verifacti_root"
+              sequence="40"/>
+
+    <menuitem id="menu_verifacti_api_config"
+              name="Configuraciones API"
+              parent="menu_verifacti_config"
+              action="action_verifacti_api_config"
+              sequence="5"/>
+
+</odoo>

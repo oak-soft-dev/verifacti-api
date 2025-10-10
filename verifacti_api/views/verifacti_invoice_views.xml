@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario de factura VeriFactu -->
+    <record id="view_verifacti_invoice_form" model="ir.ui.view">
+        <field name="name">verifacti.invoice.form</field>
+        <field name="model">verifacti.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Factura VeriFactu">
+                <header>
+                    <button name="action_send_to_verifacti" string="Enviar a Verifacti"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', 'not in', ['draft', 'error'])]}"/>
+                    <button name="action_check_registration_status" string="Verificar Estado Registro"
+                            type="object" attrs="{'invisible': [('uuid', '=', False)]}"/>
+                    <button name="action_check_invoice_status" string="Verificar Estado AEAT"
+                            type="object"/>
+                    <button name="action_download_xmls" string="Descargar XMLs"
+                            type="object" attrs="{'invisible': [('state', '!=', 'correct')]}"/>
+                    <button name="action_cancel_invoice" string="Anular Factura"
+                            type="object" attrs="{'invisible': [('state', 'not in', ['correct'])]}"
+                            confirm="¿Está seguro de anular esta factura?"/>
+                    <button name="action_reset_to_draft" string="Volver a Borrador"
+                            type="object" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,sent,pending,correct"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Placeholder para futuros botones smart -->
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="header_left">
+                            <field name="supplier_id" options="{'no_create': True}"/>
+                            <field name="serie"/>
+                            <field name="numero"/>
+                            <field name="tipo_factura"/>
+                            <field name="customer_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group name="header_right">
+                            <field name="fecha_expedicion"/>
+                            <field name="fecha_operacion"/>
+                            <field name="importe_total" widget="monetary"/>
+                            <field name="line_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Información General" name="general">
+                            <group>
+                                <group>
+                                    <field name="descripcion"/>
+                                    <field name="validar_destinatario"/>
+                                    <field name="incidencia"/>
+                                </group>
+                                <group>
+                                    <field name="tipo_rectificativa"
+                                           attrs="{'invisible': [('tipo_factura', 'not in', ['R1', 'R2', 'R3', 'R4', 'R5'])]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Líneas de Factura" name="lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="base_imponible"/>
+                                    <field name="tipo_impositivo"/>
+                                    <field name="cuota_repercutida"/>
+                                    <field name="impuesto"/>
+                                    <field name="calificacion_operacion"/>
+                                    <field name="clave_regimen"/>
+                                    <field name="operacion_exenta"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Estado Verifacti" name="verifacti_status"
+                              attrs="{'invisible': [('uuid', '=', False)]}">
+                            <group>
+                                <group>
+                                    <field name="uuid" readonly="1"/>
+                                    <field name="registration_status" readonly="1"/>
+                                    <field name="verifacti_huella" readonly="1"/>
+                                    <field name="verifacti_url" readonly="1" widget="url"/>
+                                </group>
+                                <group>
+                                    <field name="verifacti_qr" readonly="1" widget="image"
+                                           options="{'size': [200, 200]}"/>
+                                </group>
+                            </group>
+                            <group string="Errores" attrs="{'invisible': [('error_message', '=', False)]}">
+                                <field name="error_code" readonly="1"/>
+                                <field name="error_message" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="XMLs" name="xmls"
+                              attrs="{'invisible': ['&amp;', ('xml_request', '=', False), ('xml_response', '=', False)]}">
+                            <group>
+                                <field name="xml_request" readonly="1" widget="ace"
+                                       options="{'mode': 'xml'}"/>
+                                <field name="xml_response" readonly="1" widget="ace"
+                                       options="{'mode': 'xml'}"/>
+                            </group>
+                        </page>
+                        <page string="Info Técnica" name="technical">
+                            <group>
+                                <field name="api_response" readonly="1" widget="ace"
+                                       options="{'mode': 'json'}"/>
+                                <field name="created_at" readonly="1"/>
+                                <field name="updated_at" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de lista de facturas VeriFactu -->
+    <record id="view_verifacti_invoice_tree" model="ir.ui.view">
+        <field name="name">verifacti.invoice.tree</field>
+        <field name="model">verifacti.invoice</field>
+        <field name="arch" type="xml">
+            <tree string="Facturas VeriFactu"
+                  decoration-success="state == 'correct'"
+                  decoration-danger="state == 'error'"
+                  decoration-warning="state in ['pending', 'sent']"
+                  decoration-muted="state == 'cancelled'">
+                <field name="supplier_id"/>
+                <field name="name"/>
+                <field name="fecha_expedicion"/>
+                <field name="customer_id"/>
+                <field name="tipo_factura"/>
+                <field name="importe_total" sum="Total"/>
+                <field name="registration_status"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'correct'"
+                       decoration-danger="state == 'error'"
+                       decoration-warning="state in ['pending', 'sent']"
+                       decoration-muted="state == 'cancelled'"/>
+                <field name="uuid"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda -->
+    <record id="view_verifacti_invoice_search" model="ir.ui.view">
+        <field name="name">verifacti.invoice.search</field>
+        <field name="model">verifacti.invoice</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Facturas VeriFactu">
+                <field name="name" string="Número"/>
+                <field name="supplier_id"/>
+                <field name="customer_id"/>
+                <field name="serie"/>
+                <field name="numero"/>
+                <field name="uuid"/>
+                <filter string="Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Pendiente" name="pending" domain="[('state', 'in', ['pending', 'sent'])]"/>
+                <filter string="Correcto" name="correct" domain="[('state', '=', 'correct')]"/>
+                <filter string="Error" name="error" domain="[('state', '=', 'error')]"/>
+                <filter string="Anulado" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <separator/>
+                <filter string="Este mes" name="this_month"
+                        domain="[('fecha_expedicion', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d')), ('fecha_expedicion', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Este año" name="this_year"
+                        domain="[('fecha_expedicion', '&gt;=', (context_today() - relativedelta(month=1, day=1)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Proveedor" name="group_supplier" context="{'group_by': 'supplier_id'}"/>
+                    <filter string="Cliente" name="group_customer" context="{'group_by': 'customer_id'}"/>
+                    <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Tipo Factura" name="group_type" context="{'group_by': 'tipo_factura'}"/>
+                    <filter string="Fecha Expedición" name="group_date" context="{'group_by': 'fecha_expedicion'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción para abrir facturas VeriFactu -->
+    <record id="action_verifacti_invoice" model="ir.actions.act_window">
+        <field name="name">Facturas VeriFactu</field>
+        <field name="res_model">verifacti.invoice</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_verifacti_invoice_search"/>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una nueva factura VeriFactu
+            </p>
+            <p>
+                Las facturas VeriFactu se envían directamente a la AEAT mediante la API de Verifacti.
+            </p>
+        </field>
+    </record>
+</odoo>

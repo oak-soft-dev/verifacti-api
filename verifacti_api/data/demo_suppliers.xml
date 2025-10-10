@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo Companies for Verifacti Suppliers -->
+    <record id="demo_company_1" model="res.company">
+        <field name="name">Mi Empresa SL</field>
+        <field name="vat">ESB12345678</field>
+        <field name="email">info@miempresa.es</field>
+        <field name="phone">+34 912 345 678</field>
+        <field name="street">Calle Mayor, 123</field>
+        <field name="city">Madrid</field>
+        <field name="zip">28013</field>
+        <field name="country_id" ref="base.es"/>
+    </record>
+
+    <record id="demo_company_2" model="res.company">
+        <field name="name">Otra Empresa SA</field>
+        <field name="vat">ESA87654321</field>
+        <field name="email">contacto@otraempresa.es</field>
+        <field name="phone">+34 933 456 789</field>
+        <field name="street">Paseo de Gracia, 456</field>
+        <field name="city">Barcelona</field>
+        <field name="zip">08008</field>
+        <field name="country_id" ref="base.es"/>
+    </record>
+
+    <!-- Demo API Configurations -->
+    <record id="demo_api_config_1_test" model="verifacti.api.config">
+        <field name="name">Desarrollo</field>
+        <field name="company_id" ref="demo_company_1"/>
+        <field name="api_key">sk_test_demo_key_123456789</field>
+        <field name="api_url">https://api.verifacti.com</field>
+        <field name="environment">test</field>
+        <field name="is_default" eval="True"/>
+        <field name="active" eval="True"/>
+        <field name="notes">Configuración de prueba para Mi Empresa SL</field>
+    </record>
+
+    <record id="demo_api_config_2_test" model="verifacti.api.config">
+        <field name="name">Desarrollo</field>
+        <field name="company_id" ref="demo_company_2"/>
+        <field name="api_key">sk_test_demo_key_987654321</field>
+        <field name="api_url">https://api.verifacti.com</field>
+        <field name="environment">test</field>
+        <field name="is_default" eval="True"/>
+        <field name="active" eval="True"/>
+        <field name="notes">Configuración de prueba para Otra Empresa SA</field>
+    </record>
+
+    <!-- Demo Suppliers (using _inherits from res.company) -->
+    <record id="demo_supplier_test_1" model="verifacti.supplier">
+        <field name="company_id" ref="demo_company_1"/>
+        <field name="notes">Proveedor de prueba 1 con API Key de test</field>
+    </record>
+
+    <record id="demo_supplier_test_2" model="verifacti.supplier">
+        <field name="company_id" ref="demo_company_2"/>
+        <field name="notes">Proveedor de prueba 2 con API Key de test</field>
+    </record>
+</odoo>
