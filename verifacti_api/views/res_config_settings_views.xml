@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_verifacti" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.verifacti</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='settings']" position="inside">
+                <div class="app_settings_block" data-string="Verifacti" string="Verifacti" data-key="verifacti_api">
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12">
+                            <h2>Configuración de la API de Verifacti</h2>
+                        </div>
+
+                        <div class="col-12 mt16">
+                            <label for="verifacti_provider"/>
+                            <field name="verifacti_provider" widget="radio"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16" attrs="{'invisible': [('verifacti_provider', '!=', 'verifacti')]}">
+                            <label for="verifacti_api_key"/>
+                            <field name="verifacti_api_key" password="True"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16" attrs="{'invisible': [('verifacti_provider', '!=', 'verifacti')]}">
+                            <label for="verifacti_api_url"/>
+                            <field name="verifacti_api_url"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16" attrs="{'invisible': [('verifacti_provider', '!=', 'propio')]}">
+                            <label for="verifacti_propio_api_url"/>
+                            <field name="verifacti_propio_api_url"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16" attrs="{'invisible': [('verifacti_provider', '!=', 'propio')]}">
+                            <label for="verifacti_propio_api_key"/>
+                            <field name="verifacti_propio_api_key" password="True"/>
+                        </div>
+
+                        <div class="col-12 mt16" attrs="{'invisible': [('verifacti_provider', '!=', 'propio')]}">
+                            <div class="alert alert-info" role="alert">
+                                ¿No tienes acceso a un servidor VeriFactu propio? Contáctanos en
+                                <a href="mailto:oak.soft.develop@gmail.com">oak.soft.develop@gmail.com</a>
+                                y te damos acceso.
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_auto_send_enabled"/>
+                            <field name="verifacti_auto_send_enabled"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_min_invoice_date"/>
+                            <field name="verifacti_min_invoice_date"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_sector_especial"/>
+                            <field name="verifacti_sector_especial"/>
+                        </div>
+
+                        <div class="col-12 mt32">
+                            <h2>Configuración Avanzada</h2>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_max_retries"/>
+                            <field name="verifacti_max_retries"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_retry_delay"/>
+                            <field name="verifacti_retry_delay"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_max_bulk_limit"/>
+                            <field name="verifacti_max_bulk_limit"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_check_system_load"/>
+                            <field name="verifacti_check_system_load"/>
+                        </div>
+
+                        <div class="col-12 col-lg-6 mt16">
+                            <label for="verifacti_max_system_load"/>
+                            <field name="verifacti_max_system_load"/>
+                        </div>
+
+                        <div class="col-12 mt32">
+                            <h2>Información</h2>
+                        </div>
+
+                        <div class="col-12 mt16">
+                            <div class="alert alert-info">
+                                <h4>Sobre VeriFactu</h4>
+                                <p>VeriFactu es el nuevo sistema de la AEAT para el control de facturas.</p>
+                                <p><strong>Obligatorio desde:</strong></p>
+                                <ul>
+                                    <li>1 enero 2026: Empresas con Impuesto de Sociedades</li>
+                                    <li>1 julio 2026: Resto de empresas y autónomos</li>
+                                </ul>
+                                <p><strong>¿Prefieres un servidor VeriFactu propio?</strong>
+                                    Contáctanos en <a href="mailto:oak.soft.develop@gmail.com">oak.soft.develop@gmail.com</a>
+                                    y te damos acceso.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
