@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Demo Suppliers (Compañías Emisoras con Verifacti API configurada) -->
+
+    <!-- Partner para Mi Empresa SL -->
+    <record id="demo_partner_miempresa" model="res.partner">
+        <field name="name">Mi Empresa SL</field>
+        <field name="vat">B75777847</field>
+        <field name="email">info@miempresa.es</field>
+        <field name="phone">+34 912 345 678</field>
+        <field name="street">Calle Mayor, 123</field>
+        <field name="city">Madrid</field>
+        <field name="zip">28013</field>
+        <field name="country_id" ref="base.es"/>
+        <field name="is_company">True</field>
+    </record>
+
+    <!-- Compañía Emisora: Mi Empresa SL -->
+    <record id="demo_company_miempresa" model="res.company">
+        <field name="name">Mi Empresa SL</field>
+        <field name="partner_id" ref="demo_partner_miempresa"/>
+        <field name="vat">B75777847</field>
+    </record>
+
+    <!-- Partner para Otra Empresa SA -->
+    <record id="demo_partner_otraempresa" model="res.partner">
+        <field name="name">Otra Empresa SA</field>
+        <field name="vat">A87654321</field>
+        <field name="email">contacto@otraempresa.es</field>
+        <field name="phone">+34 933 456 789</field>
+        <field name="street">Paseo de Gracia, 456</field>
+        <field name="city">Barcelona</field>
+        <field name="zip">08008</field>
+        <field name="country_id" ref="base.es"/>
+        <field name="is_company">True</field>
+    </record>
+
+    <!-- Compañía Emisora: Otra Empresa SA -->
+    <record id="demo_company_otraempresa" model="res.company">
+        <field name="name">Otra Empresa SA</field>
+        <field name="partner_id" ref="demo_partner_otraempresa"/>
+        <field name="vat">A87654321</field>
+    </record>
+</odoo>
