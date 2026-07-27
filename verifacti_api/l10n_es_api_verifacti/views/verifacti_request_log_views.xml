@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_verifacti_request_log_list" model="ir.ui.view">
+        <field name="name">l10n_es_verifacti.request.log.list</field>
+        <field name="model">l10n_es_verifacti.request.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false">
+                <field name="create_date"/>
+                <field name="endpoint"/>
+                <field name="method"/>
+                <field name="emisor_id"/>
+                <field name="status_code"/>
+                <field name="duration_ms" widget="float" digits="[16,1]"/>
+                <field name="remote_addr" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_verifacti_request_log_form" model="ir.ui.view">
+        <field name="name">l10n_es_verifacti.request.log.form</field>
+        <field name="model">l10n_es_verifacti.request.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="endpoint"/>
+                            <field name="method"/>
+                            <field name="status_code"/>
+                            <field name="duration_ms"/>
+                        </group>
+                        <group>
+                            <field name="emisor_id"/>
+                            <field name="api_key_prefix"/>
+                            <field name="remote_addr"/>
+                            <field name="create_date"/>
+                        </group>
+                    </group>
+                    <group string="Petición">
+                        <field name="request_body" nolabel="1"/>
+                    </group>
+                    <group string="Respuesta">
+                        <field name="response_body" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_verifacti_request_log" model="ir.actions.act_window">
+        <field name="name">Logs API</field>
+        <field name="res_model">l10n_es_verifacti.request.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

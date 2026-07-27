@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_verifacti_emisor_system,verifacti.emisor.system,model_l10n_es_verifacti_emisor,base.group_system,1,1,1,1
+access_verifacti_registro_system,verifacti.registro.system,model_l10n_es_verifacti_registro,base.group_system,1,1,1,1
+access_verifacti_registro_linea_system,verifacti.registro.linea.system,model_l10n_es_verifacti_registro_linea,base.group_system,1,1,1,1
+access_verifacti_request_log_system,verifacti.request.log.system,model_l10n_es_verifacti_request_log,base.group_system,1,0,0,1

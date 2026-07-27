@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Heredar la plantilla base de factura de Odoo para añadir el QR de Verifacti -->
+    <template id="report_invoice_document_inherit_verifacti" inherit_id="account.report_invoice_document">
+
+        <!-- QR ARRIBA: Centrado garantizado con múltiples métodos -->
+        <xpath expr="//div[hasclass('page')]" position="before">
+            <t t-if="o.verifacti_qr">
+                <div style="width: 100%; text-align: center; margin: 0 auto 20px auto; display: block;">
+                    <div style="display: inline-block; text-align: center;">
+                        <!-- QR entre 30x30mm y 40x40mm según AEAT (aprox 113-151px) -->
+                        <img t-att-src="'data:image/png;base64,' + (o.verifacti_qr.decode('utf-8') if isinstance(o.verifacti_qr, bytes) else str(o.verifacti_qr))"
+                             style="width: 35mm; height: 35mm; display: block; margin: 0 auto;"
+                             alt="QR VeriFactu"/>
+                        <!-- Texto obligatorio según normativa -->
+                        <p style="font-size: 8px; color: #666; margin: 3px 0 0 0; text-align: center;">
+                            Factura verificable en la sede electrónica de la AEAT - VERI*FACTU
+                        </p>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+
+        <!-- Añadir huella digital de forma discreta al final, también centrada -->
+        <xpath expr="//div[hasclass('page')]" position="after">
+            <div t-if="o.verifacti_huella" style="width: 100%; text-align: center; margin-top: 10px;">
+                <p style="font-size: 7px; color: #999; margin: 0; font-family: monospace; text-align: center;">
+                    Huella: <span t-esc="o.verifacti_huella[:50]"/>
+                </p>
+            </div>
+        </xpath>
+        
+    </template>
+</odoo>

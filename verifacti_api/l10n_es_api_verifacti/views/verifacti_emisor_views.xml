@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_verifacti_emisor_list" model="ir.ui.view">
+        <field name="name">l10n_es_verifacti.emisor.list</field>
+        <field name="model">l10n_es_verifacti.emisor</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="nif"/>
+                <field name="nombre_razon"/>
+                <field name="entorno"/>
+                <field name="certificate_id"/>
+                <field name="registro_count" string="Registros"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_verifacti_emisor_form" model="ir.ui.view">
+        <field name="name">l10n_es_verifacti.emisor.form</field>
+        <field name="model">l10n_es_verifacti.emisor</field>
+        <field name="arch" type="xml">
+            <form string="Emisor VeriFactu">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_registros" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="registro_count" widget="statinfo" string="Registros"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group string="Emisor">
+                            <field name="nif"/>
+                            <field name="nombre_razon"/>
+                            <field name="entorno"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="API">
+                            <field name="api_key" readonly="1"/>
+                            <button name="action_regenerate_api_key" type="object" string="Regenerar API Key"
+                                    class="btn-secondary" confirm="El cliente dejará de funcionar hasta actualizar la clave. ¿Continuar?"/>
+                        </group>
+                    </group>
+                    <group string="Certificado y envío AEAT">
+                        <field name="certificate_id"/>
+                        <field name="next_batch_time" readonly="1"/>
+                        <field name="last_registro_id" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Sistema Informático (declaración responsable)">
+                            <group>
+                                <group>
+                                    <field name="si_nombre_razon"/>
+                                    <field name="si_nif"/>
+                                    <field name="si_nombre_sistema"/>
+                                    <field name="si_id_sistema"/>
+                                    <field name="si_version"/>
+                                </group>
+                                <group>
+                                    <field name="si_numero_instalacion"/>
+                                    <field name="si_solo_verifactu"/>
+                                    <field name="si_multi_ot"/>
+                                    <field name="si_indicador_multiples_ot"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_verifacti_emisor" model="ir.actions.act_window">
+        <field name="name">Emisores</field>
+        <field name="res_model">l10n_es_verifacti.emisor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

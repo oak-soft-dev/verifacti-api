@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_verifacti_registro_list" model="ir.ui.view">
+        <field name="name">l10n_es_verifacti.registro.list</field>
+        <field name="model">l10n_es_verifacti.registro</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false">
+                <field name="chain_index"/>
+                <field name="emisor_id"/>
+                <field name="tipo_registro"/>
+                <field name="num_serie"/>
+                <field name="fecha_expedicion_str"/>
+                <field name="tipo_factura"/>
+                <field name="importe_total"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'accepted'"
+                       decoration-warning="state in ('pending', 'accepted_errors', 'aeat_error')"
+                       decoration-danger="state == 'rejected'"/>
+                <field name="response_csv" optional="hide"/>
+                <field name="uuid" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_verifacti_registro_form" model="ir.ui.view">
+        <field name="name">l10n_es_verifacti.registro.form</field>
+        <field name="model">l10n_es_verifacti.registro</field>
+        <field name="arch" type="xml">
+            <form string="Registro VeriFactu" create="false" delete="false" edit="false">
+                <sheet>
+                    <group>
+                        <group string="Factura">
+                            <field name="emisor_id"/>
+                            <field name="tipo_registro"/>
+                            <field name="serie"/>
+                            <field name="numero"/>
+                            <field name="fecha_expedicion_str"/>
+                            <field name="tipo_factura"/>
+                            <field name="descripcion"/>
+                            <field name="importe_total"/>
+                            <field name="cuota_total"/>
+                        </group>
+                        <group string="VeriFactu">
+                            <field name="uuid"/>
+                            <field name="state"/>
+                            <field name="anulada"/>
+                            <field name="chain_index"/>
+                            <field name="huella"/>
+                            <field name="huella_anterior"/>
+                            <field name="fecha_hora_huso_gen"/>
+                            <field name="response_csv"/>
+                            <field name="error_code"/>
+                            <field name="error_message"/>
+                            <field name="retry_count"/>
+                        </group>
+                    </group>
+                    <group string="QR">
+                        <field name="qr_url" widget="url"/>
+                        <field name="qr_png" widget="image" options="{'size': [180, 180]}"/>
+                    </group>
+                    <notebook>
+                        <page string="Líneas">
+                            <field name="linea_ids">
+                                <list>
+                                    <field name="base_imponible"/>
+                                    <field name="impuesto"/>
+                                    <field name="tipo_impositivo"/>
+                                    <field name="cuota_repercutida"/>
+                                    <field name="calificacion_operacion"/>
+                                    <field name="operacion_exenta"/>
+                                    <field name="clave_regimen"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Payload">
+                            <field name="payload_json" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                        <page string="XML registro">
+                            <field name="xml_registro" widget="ace" options="{'mode': 'xml'}"/>
+                        </page>
+                        <page string="XML AEAT">
+                            <field name="xml_soap_request" widget="ace" options="{'mode': 'xml'}"/>
+                            <field name="xml_soap_response" widget="ace" options="{'mode': 'xml'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_verifacti_registro_search" model="ir.ui.view">
+        <field name="name">l10n_es_verifacti.registro.search</field>
+        <field name="model">l10n_es_verifacti.registro</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="num_serie"/>
+                <field name="uuid"/>
+                <field name="emisor_id"/>
+                <filter name="pendientes" string="Pendientes" domain="[('state', '=', 'pending')]"/>
+                <filter name="aceptados" string="Aceptados" domain="[('state', 'in', ('accepted', 'accepted_errors'))]"/>
+                <filter name="rechazados" string="Rechazados" domain="[('state', '=', 'rejected')]"/>
+                <filter name="errores" string="Error AEAT" domain="[('state', '=', 'aeat_error')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_emisor" string="Emisor" context="{'group_by': 'emisor_id'}"/>
+                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_verifacti_registro" model="ir.actions.act_window">
+        <field name="name">Registros</field>
+        <field name="res_model">l10n_es_verifacti.registro</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

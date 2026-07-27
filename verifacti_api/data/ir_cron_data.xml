@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cron para enviar facturas pendientes automáticamente -->
+        <record id="ir_cron_send_pending_invoices" model="ir.cron">
+            <field name="name">Verifacti: Enviar Facturas Pendientes</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_send_pending_invoices_to_verifacti()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+            <field name="priority">5</field>
+        </record>
+
+        <record id="ir_cron_check_registration_status" model="ir.cron">
+            <field name="name">Verifacti: Verificar Estados</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_check_pending_verifacti_registrations()</field>
+            <field name="interval_number">5</field>  <!-- 5 minutos según recomendaciones -->
+            <field name="interval_type">minutes</field>
+            <field name="active" eval="True"/>
+            <field name="priority">10</field>  <!-- Menor prioridad que el envío -->
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Submenú VeriFactu en Configuración -->
+    <menuitem id="menu_verifacti_config"
+              name="VeriFactu"
+              parent="account.menu_finance_configuration"
+              sequence="100"
+              groups="base.group_system"/>
+
+    <!-- Logs de API dentro del submenú -->
+    <menuitem id="menu_verifacti_api_log_list"
+              name="Logs de API"
+              parent="menu_verifacti_config"
+              action="action_verifacti_api_log"
+              sequence="20"/>
+</odoo>

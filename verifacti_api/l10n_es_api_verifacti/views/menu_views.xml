@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_verifactu_server_root" name="VeriFactu Server"
+              groups="base.group_system" sequence="90"/>
+    <menuitem id="menu_verifactu_emisores" name="Emisores"
+              parent="menu_verifactu_server_root" action="action_verifacti_emisor"
+              groups="base.group_system" sequence="10"/>
+    <menuitem id="menu_verifactu_registros" name="Registros"
+              parent="menu_verifactu_server_root" action="action_verifacti_registro"
+              groups="base.group_system" sequence="20"/>
+    <menuitem id="menu_verifactu_logs" name="Logs API"
+              parent="menu_verifactu_server_root" action="action_verifacti_request_log"
+              groups="base.group_system" sequence="30"/>
+</odoo>

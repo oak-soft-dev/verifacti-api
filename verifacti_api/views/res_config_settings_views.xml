@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Settings Form View -->
+    <record id="res_config_settings_view_form_verifacti" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.verifacti</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Verifacti" name="verifacti_api" logo="/verifacti_api/static/description/icon.png">
+                    <block title="Configuración de la API de Verifacti" name="verifacti_api_settings">
+                        <setting id="verifacti_provider_setting" string="Proveedor" help="Elige el backend que procesa las facturas VeriFactu: el SaaS de Verifacti o tu propio servidor (módulo l10n_es_api_verifacti)">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <field name="verifacti_provider" widget="radio" nolabel="1"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="verifacti_api_key_setting" string="API Key de Verifacti" invisible="verifacti_provider != 'verifacti'" help="Configura tu API Key de Verifacti para habilitar el envío de facturas a VeriFactu">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="verifacti_api_key" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_api_key" password="True" placeholder="Introduce tu API Key de Verifacti"/>
+                                </div>
+                                <div class="row mt16" invisible="not verifacti_api_key">
+                                    <label for="verifacti_api_url" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_api_url" placeholder="https://api.verifacti.com"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="verifacti_propio_setting" string="API VeriFactu propia" invisible="verifacti_provider != 'propio'" help="Credenciales del servidor propio con el módulo l10n_es_api_verifacti (VeriFactu Server &gt; Emisores)">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="verifacti_propio_api_url" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_propio_api_url" placeholder="http://localhost:8069"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="verifacti_propio_api_key" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_propio_api_key" password="True" placeholder="API Key del emisor (48 caracteres)"/>
+                                </div>
+                            </div>
+                            <div class="alert alert-info mt16" role="alert">
+                                <i class="fa fa-envelope"/>
+                                ¿No tienes acceso a un servidor VeriFactu propio? Contáctanos en
+                                <a href="mailto:oak.soft.develop@gmail.com">oak.soft.develop@gmail.com</a>
+                                y te damos acceso.
+                            </div>
+                        </setting>
+                        <setting id="verifacti_auto_send_setting" string="Envío Automático" invisible="(verifacti_provider == 'verifacti' and not verifacti_api_key) or (verifacti_provider == 'propio' and not verifacti_propio_api_key)" help="Activa el envío automático de facturas a VeriFactu cuando se publiquen">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="verifacti_auto_send_enabled" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_auto_send_enabled" widget="boolean_toggle"/>
+                                </div>
+                                <div class="row mt16" invisible="not verifacti_auto_send_enabled">
+                                    <label for="verifacti_min_invoice_date" class="col-lg-3 o_light_label" string="Fecha Mínima"/>
+                                    <field name="verifacti_min_invoice_date"/>
+                                </div>
+                            </div>
+                        </setting>
+
+                        <setting id="verifacti_sector_especial_setting" string="Sector Especial" invisible="(verifacti_provider == 'verifacti' and not verifacti_api_key) or (verifacti_provider == 'propio' and not verifacti_propio_api_key)" help="Marca si tu empresa pertenece a un sector especial (límite 3.000€ para factura simplificada)">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="verifacti_sector_especial" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_sector_especial" widget="boolean_toggle"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+
+                    <block title="Configuración Avanzada" name="verifacti_advanced_settings" invisible="(verifacti_provider == 'verifacti' and not verifacti_api_key) or (verifacti_provider == 'propio' and not verifacti_propio_api_key)">
+                        <setting id="verifacti_retry_settings" string="Reintentos y Timeout" help="Configura el comportamiento de reintentos en caso de error">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="verifacti_max_retries" class="col-lg-3 o_light_label" string="Reintentos"/>
+                                    <field name="verifacti_max_retries"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="verifacti_retry_delay" class="col-lg-3 o_light_label" string="Espera (segundos)"/>
+                                    <field name="verifacti_retry_delay"/>
+                                </div>
+                            </div>
+                        </setting>
+
+                        <setting id="verifacti_bulk_limit_setting" string="Límite de Operaciones Masivas" help="Número máximo de facturas que se pueden procesar en operaciones masivas">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="verifacti_max_bulk_limit" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_max_bulk_limit"/>
+                                </div>
+                            </div>
+                        </setting>
+
+                        <setting id="verifacti_system_load_setting" string="Control de Carga del Sistema" help="Pausar envío si el sistema está muy cargado">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="verifacti_check_system_load" class="col-lg-3 o_light_label"/>
+                                    <field name="verifacti_check_system_load" widget="boolean_toggle"/>
+                                </div>
+                                <div class="row mt16" invisible="not verifacti_check_system_load">
+                                    <label for="verifacti_max_system_load" class="col-lg-3 o_light_label" string="Carga Máxima"/>
+                                    <field name="verifacti_max_system_load"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+
+                    <block title="Estado del Sistema" name="verifacti_status" invisible="(verifacti_provider == 'verifacti' and not verifacti_api_key) or (verifacti_provider == 'propio' and not verifacti_propio_api_key)">
+                        <!-- Alerta de Pausa -->
+                        <div class="alert alert-warning" role="alert" invisible="not verifacti_auto_send_paused">
+                            <h4><i class="fa fa-pause-circle"/> Envío Automático Pausado</h4>
+                            <field name="verifacti_auto_send_paused_reason" readonly="1" nolabel="1"/>
+                            <p><strong>Pausado desde:</strong> <field name="verifacti_auto_send_paused_since" readonly="1" nolabel="1"/></p>
+                            <p><i class="fa fa-info-circle"/> El envío se reanudará automáticamente cuando la carga del CPU vuelva a niveles normales.</p>
+                            <button name="action_resume_verifacti_auto_send"
+                                    string="Intentar Reanudar Ahora"
+                                    type="object"
+                                    class="btn-warning"
+                                    icon="fa-play"/>
+                        </div>
+                    </block>
+
+                    <block title="Información" name="verifacti_info">
+                        <div class="alert alert-info" role="alert">
+                            <h4><i class="fa fa-info-circle"/> Sobre VeriFactu</h4>
+                            <p>VeriFactu es el nuevo sistema de la AEAT para el control de facturas.</p>
+                            <p><strong>Obligatorio desde:</strong></p>
+                            <ul>
+                                <li>1 enero 2026: Empresas con Impuesto de Sociedades</li>
+                                <li>1 julio 2026: Resto de empresas y autónomos</li>
+                            </ul>
+                            <p><strong>Enlaces útiles:</strong></p>
+                            <ul>
+                                <li><a href="https://www.verifacti.com" target="_blank">Verifacti.com</a></li>
+                                <li><a href="https://www.verifacti.com/docs" target="_blank">Documentación API</a></li>
+                                <li><a href="https://sede.agenciatributaria.gob.es" target="_blank">AEAT - VeriFactu</a></li>
+                            </ul>
+                            <p><strong>¿Prefieres un servidor VeriFactu propio?</strong></p>
+                            <p>Contáctanos en <a href="mailto:oak.soft.develop@gmail.com">oak.soft.develop@gmail.com</a> y te damos acceso.</p>
+                        </div>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
