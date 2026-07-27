@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Demo Partners (Customers) for invoices -->
+        <record id="demo_partner_acme" model="res.partner">
+            <field name="name">ACME Corporation S.L.</field>
+            <field name="vat">ESB85905495</field>
+            <field name="street">Gran Vía, 123</field>
+            <field name="city">Madrid</field>
+            <field name="zip">28013</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="email">facturacion@acme.es</field>
+            <field name="phone">+34 910 111 222</field>
+            <field name="customer_rank">1</field>
+        </record>
+
+        <record id="demo_partner_techsolutions" model="res.partner">
+            <field name="name">Tech Solutions Iberia S.A.</field>
+            <field name="vat">ESA28015865</field>
+            <field name="street">Paseo de la Castellana, 95</field>
+            <field name="city">Madrid</field>
+            <field name="zip">28046</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="email">admin@techsolutions.es</field>
+            <field name="phone">+34 911 333 444</field>
+            <field name="customer_rank">1</field>
+        </record>
+
+        <!-- Demo Products -->
+        <record id="demo_product_consulting" model="product.product">
+            <field name="name">Servicios de Consultoría VeriFactu</field>
+            <field name="type">service</field>
+            <field name="list_price">100.0</field>
+            <field name="standard_price">50.0</field>
+        </record>
+
+        <record id="demo_product_development" model="product.product">
+            <field name="name">Desarrollo de Software VeriFactu</field>
+            <field name="type">service</field>
+            <field name="list_price">80.0</field>
+            <field name="standard_price">40.0</field>
+        </record>
+
+        <record id="demo_product_support" model="product.product">
+            <field name="name">Soporte Técnico VeriFactu</field>
+            <field name="type">service</field>
+            <field name="list_price">60.0</field>
+            <field name="standard_price">30.0</field>
+        </record>
+
+        <!--
+        NOTA: Las facturas demo se han deshabilitado porque requieren configuración
+        contable completa (diarios, cuentas, impuestos, etc.) que varía según
+        la instalación de Odoo.
+
+        Para crear facturas de prueba:
+        1. Ve a Facturación → Clientes → Facturas
+        2. Crea una nueva factura manualmente
+        3. Usa los productos demo creados arriba
+        4. Usa los clientes demo: ACME Corporation o Tech Solutions
+        -->
+    </data>
+</odoo>

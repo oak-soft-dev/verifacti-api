@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- ACCIONES DE VENTANA -->
+    <!-- ============================================ -->
+
+    <!-- Acción para Facturas de Cliente con VeriFactu -->
+    <record id="action_verifacti_customer_invoices" model="ir.actions.act_window">
+        <field name="name">Facturas de Cliente</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{
+            'default_move_type': 'out_invoice',
+            'search_default_posted': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear factura de cliente
+            </p>
+            <p>
+                Las facturas de cliente publicadas se pueden enviar a VeriFactu desde el botón "Enviar a VeriFactu"
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para Facturas Rectificativas con VeriFactu -->
+    <record id="action_verifacti_customer_refunds" model="ir.actions.act_window">
+        <field name="name">Facturas Rectificativas</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('move_type', '=', 'out_refund')]</field>
+        <field name="context">{
+            'default_move_type': 'out_refund',
+            'search_default_posted': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear factura rectificativa
+            </p>
+            <p>
+                Las facturas rectificativas publicadas se pueden enviar a VeriFactu
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para Facturas Pendientes de Envío VeriFactu -->
+    <record id="action_verifacti_pending_invoices" model="ir.actions.act_window">
+        <field name="name">Pendientes de Envío</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('move_type', 'in', ['out_invoice', 'out_refund']),
+            ('state', '=', 'posted'),
+            ('verifacti_state', '=', 'draft')
+        ]</field>
+        <field name="context">{
+            'search_default_posted': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay facturas pendientes de envío
+            </p>
+            <p>
+                Aquí aparecerán las facturas publicadas que aún no se han enviado a VeriFactu
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para Facturas con Estado VeriFactu -->
+    <record id="action_verifacti_sent_invoices" model="ir.actions.act_window">
+        <field name="name">Enviadas a VeriFactu</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('move_type', 'in', ['out_invoice', 'out_refund']),
+            ('verifacti_uuid', '!=', False)
+        ]</field>
+        <field name="context">{
+            'search_default_verifacti_correct': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay facturas enviadas
+            </p>
+            <p>
+                Aquí aparecerán las facturas que se han enviado a VeriFactu
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para Facturas con Error VeriFactu -->
+    <record id="action_verifacti_error_invoices" model="ir.actions.act_window">
+        <field name="name">Facturas con Error</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('move_type', 'in', ['out_invoice', 'out_refund']),
+            ('verifacti_state', '=', 'error')
+        ]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay facturas con error
+            </p>
+            <p>
+                Aquí aparecerán las facturas que tuvieron errores al enviarse a VeriFactu
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción para ver clientes desde el menú de Verifacti -->
+    <record id="action_verifacti_partners" model="ir.actions.act_window">
+        <field name="name">Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('customer_rank', '>', 0)]</field>
+        <field name="context">{'default_customer_rank': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Agregar un cliente
+            </p>
+            <p>
+                Los clientes son los destinatarios de tus facturas.
+                Usa los contactos estándar de Odoo.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- ACCIONES MASIVAS (SERVER ACTIONS) - ODOO 19 -->
+    <!-- ============================================ -->
+
+    <!-- Acción masiva: Verificar estado de facturas seleccionadas -->
+    <record id="action_bulk_check_verifacti_status" model="ir.actions.server">
+        <field name="name">VeriFactu: Verificar Estado</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = records.action_check_verifacti_status()
+        </field>
+    </record>
+
+    <!-- Acción masiva: Enviar facturas seleccionadas a VeriFactu -->
+    <record id="action_bulk_send_to_verifacti" model="ir.actions.server">
+        <field name="name">VeriFactu: Enviar a VeriFactu</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = records.action_bulk_send_to_verifacti()
+        </field>
+    </record>
+
+</odoo>
